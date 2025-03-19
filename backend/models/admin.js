@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const voterSchema = new mongoose.Schema({
+const adminSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true
@@ -14,10 +14,7 @@ const voterSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    govId: {
-        type: String,
-    },
     
 });
 
-module.exports = mongoose.model('Voter', voterSchema);
+module.exports = mongoose.model('Admin', adminSchema);

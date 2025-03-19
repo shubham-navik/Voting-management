@@ -1,7 +1,10 @@
 const Voter = require('../models/voter');
 const Election = require('../models/election');
+const Candidate = require('../models/candidate');
+const Contestant = require('../models/contestant')
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+
 
 // voter registration
 exports.register = async (req, res) => {
@@ -11,21 +14,17 @@ exports.register = async (req, res) => {
         if (voter) {
             return res.status(400).json({ msg: "Voter already exists" });
         }
+
+        const salt = await bcrypt.genSalt(10);
+        const hashPassword = await bcrypt.hash(password, salt);
         voter = new Voter({
             name,
             email,
-            password,
-            govId: voter._id,//give unique id to voter
+            password:hashPassword
+            // govId: voter._id,//give unique id to voter
         });
-        const salt = await bcrypt.genSalt(10);
-        voter.password = await bcrypt.hash(password, salt);
         await voter.save();
-        // const payload = {//data to be sent in token
-        //     voter: {
-        //         id: voter._id
-        //     }
-        // }
-        // jwt.sign(payload, process.env.jwtSecret);
+
         res.send('Voter registered successfully');
     }
     catch (err) {
@@ -51,10 +50,10 @@ exports.login = async (req, res) => {
                 id: voter._id,
                 name: voter.name,
                 email: voter.email,
-                govId: voter.govId
+                govId: voter._id.toString()
             }
         };
-        const token = jwt.sign(payload, process.env.jwtSecret);
+        const token = jwt.sign(payload, process.env.JWT_SECRET,{expiresIn:'24h'});
         res.send({ message: 'Voter logged in successfully', voter,token });
     }
     catch (err) {
@@ -65,41 +64,64 @@ exports.login = async (req, res) => {
 
 // do voting
 exports.vote = async (req, res) => {
-    const { electionId, partyId ,candidateId} = req.body;
+    const { electionId, candidateId } = req.body;
+    
     try {
+        // Find voter
         let voter = await Voter.findById(req.voter.id);
         if (!voter) {
             return res.status(400).json({ msg: "Voter does not exist" });
         }
 
-        let election = await Election.findById(electionId);
+        // Find election
+        let election = await Election.findOne({ electionId: electionId });
         if (!election) {
             return res.status(400).json({ msg: "Election does not exist" });
         }
-   
-        let isPartyExist = election.parties.find(partyId);
-        if (!isPartyExist) {
-            return res.status(400).json({ msg: "Party does not exist in this election" });
-        }    
+        // console.log(election);
 
-        if (election.startDate > Date.now()) {
+        // Check election timing
+        if (new Date(election.startDate) > new Date()) {
             return res.status(400).json({ msg: "Election has not started yet" });
         }
-        if (election.endDate < Date.now()) {
+        if (new Date(election.endDate) < new Date()) {
             return res.status(400).json({ msg: "Election has ended" });
         }
 
-        if (election.voters.includes(voter._id)) {
-            return res.status(400).json({ msg: "You have already voted in this election" });
+        // Check if voter has already voted
+        const isVoter = election.voters.includes(voter._id);
+        if (isVoter) {
+            return res.status(400).json({ msg: "You have already voted" });
         }
 
-        election.voters.push(voter._id);
-        election.candidates.findById(candidateId).vote++;
+        const contestant = await Contestant.findOne({candidate : candidateId});
+
+        if(!contestant){
+            return res.status(400).json({ msg: "contestant does not exist in this election" });
+        }
+        console.log(contestant);
+        console.log(election.contestants);
+        // Update candidate votes
+        const contestantId = election.contestants.includes(contestant._id);
+        console.log(contestantId);
+        if (!contestantId) {
+            return res.status(404).json({
+                msg:"Contestant not found in election :"+electionId
+            })
+        }
+        // do vote
+        contestant.votes++;
+        // Add voter to election voters list and updates the contestant schema
+        election.voters.push(voter);
+        await contestant.save()
+
+        // Save the updated election data
         await election.save();
-        res.send('Voted successfully');
-    }
+
+        res.status(200).json({ msg: "Voted successfully" });
+    } 
     catch (err) {
-        console.log(err.message);
-        res.status(500).send('Error in voting');
+        console.error(err.message);
+        res.status(500).send("Error in voting");
     }
-} 
+};

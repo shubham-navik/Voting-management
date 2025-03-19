@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const electionSchema = new mongoose.Schema({
     electionId: {
-        type: string,
+        type: String,
         required: true,
         unique: true
     },
@@ -15,34 +15,30 @@ const electionSchema = new mongoose.Schema({
         required: true
     },
     parties: [{
-        party: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Party'
-        },
-
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Party'
     }],
-
-    candidates: [{
-        candidate: {
-            type: mongoose.Schema.Types.ObjectId,
-        ref: 'Candidate'
-        },
-        votes: {
-            type: Number,
-            default: 0
-        }
+    contestants: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref:'Contestant'
     }],
-    voters: {
-        type: Array,
-        // required: true
-        unique: true
+    voters: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Voter'  // Properly referencing Voters
+    }],
+    startDate: {
+        type: Date,
+        required:true //Must be explicitly provided
     },
-    startDate: new Date(Date.now()),
-    endDate: new Date(Date.now() + 1 * 6 * 60 * 60 * 1000),
+    endDate: {
+        type: Date,
+        required: true  // Must be explicitly provided
+    },
     status: {
         type: String,
-        default: 'pending'
+        enum: ["pending", "ongoing", "completed"],  // Restricts possible values
+        default: "pending"
     }
-});
+}, { timestamps: true });
 
-module.exports = mongoose.model('Election', electionSchema);
+module.exports = mongoose.model("Election", electionSchema);

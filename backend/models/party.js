@@ -6,7 +6,7 @@ const partySchema = new mongoose.Schema({
         required: true,
         unique: true
     },
-    slogon: {
+    slogan: {  // Fixed from `slogon` to `slogan`
         type: String,
         required: true,
         unique: true
@@ -19,8 +19,7 @@ const partySchema = new mongoose.Schema({
     createdBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Candidate'
-    },
-    createdAt: Date.now(),
-},{timestamps:true});
+    }
+}, { timestamps: true });
 
 module.exports = mongoose.model('Party', partySchema);

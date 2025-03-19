@@ -17,17 +17,14 @@ const candidateSchema = new mongoose.Schema({
     party: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Party',
-        required: true
+        // required: true
     },
     participatedElections: [{
-        elections: {
+         
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'Election'
-        },
-        resultStatus: {
-            type: String,
-            default: 'pending'
-        }
+            ref:'Election',
+        
+
     }]
 
 
