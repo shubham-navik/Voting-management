@@ -1,5 +1,6 @@
 const Candidate = require('../models/candidate');
 const Contestant = require('../models/contestant');
+const election = require('../models/election');
 const Election = require('../models/election');
 const Party = require('../models/party');
 const bcrypt = require('bcryptjs');
@@ -136,3 +137,31 @@ exports.participate = async (req, res) => {
         res.status(500).send('Error in participating in election');
     }
 };
+
+
+
+// get all election participated by me (candidate)
+exports.getParticipatedElection = async (req, res) => {
+    try {
+
+        const candidate = await Candidate.findById(req.candidate.id);
+        if (!candidate) {
+            return res.status(400).json({ msg: "Candidate does not exist" });
+        }
+
+        const participatedElections = candidate.participatedElections;
+
+        // const allElections = await Election.find({ electionId: { $in: participatedElectionIds } });
+
+        res.status(200).json({
+            msg: `All elections participated by ${candidate.name}`,
+            participatedElections
+        });
+    }
+    catch (err) {
+        console.log(err);
+        res.status(500).json({
+            msg:"err finding ellection by candidate"
+        })
+    }
+} 

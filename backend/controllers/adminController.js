@@ -1,4 +1,5 @@
 const Admin = require('../models/admin');
+const Voter = require('../models/voter')
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
@@ -52,6 +53,26 @@ exports.adminLogin = async (req, res) => {
     catch (err) {
         console.log(err.message);
         res.status(500).send('Server error');
+    }
+}
+
+//get  all voter list avalible in our country
+exports.getAllVoter = async (req, res) => {
+    try {
+
+        const voters = await Voter.find({});
+
+        res.status(200).json({
+            msg: "All elegible Voters ",
+            voters
+        })
+        
+    }
+    catch (err) {
+        console.log(err);
+        res.status(500).json({
+            msg:"server error"
+        })
     }
 }
 
