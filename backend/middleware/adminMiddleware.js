@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
 exports.adminAuth = async (req, res, next) => {
-    const token ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbiI6eyJpZCI6IjY3ZDliN2UzZTAzZmU2MDZlOTNiNTI3ZiIsIm5hbWUiOiJFQzEiLCJlbWFpbCI6ImVjMS5jb20ifSwiaWF0IjoxNzQyMzIxNjQ5LCJleHAiOjE3NDI0MDgwNDl9._V09btnN0e_T8KB0sNyBJlzTzYiN9EnXFwfwe_NGYz8";
+    const token ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbiI6eyJpZCI6IjY3ZDliN2UzZTAzZmU2MDZlOTNiNTI3ZiIsIm5hbWUiOiJFQzEiLCJlbWFpbCI6ImVjMS5jb20ifSwiaWF0IjoxNzQ0NDU3ODI1LCJleHAiOjE3NDQ1NDQyMjV9.ZWjy5pXwBSM8b-rQBM1uMrqA_7BYr22848FZSpZxULg";
     if (!token) {
         return res.status(401).json({ msg: "No token, authorization denied" });
     }

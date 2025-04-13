@@ -62,6 +62,33 @@ exports.login = async (req, res) => {
     }
 }
 
+exports.profile = async (req, res) => {
+    try {
+        const id = req.voter.id;
+        const voter = await Voter.findById(id);
+        if (!voter) {
+            return res.status(400).json({
+                msg: "voter not found"
+            })
+        }
+        // const { name, email } = voter;
+        return res.status(200).json({
+            msg: "voter profile",
+            voter: {
+                name: voter.name,
+                email: voter.email,
+                govId: voter._id.toString()
+            }
+        })
+
+    } catch (err) {
+        return res.status(500).json({
+            msg: "Error in getting voter profile",
+            error: err.message
+        })
+    }
+}
+
 // do voting
 exports.vote = async (req, res) => {
     const { electionId, candidateId } = req.body;

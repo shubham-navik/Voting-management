@@ -1,9 +1,10 @@
-
+const cors  =require('cors');//to allow cross origin resource sharing
 const express = require('express');
 const app = express();
 app.use(express.json());//to parse json data
 require('dotenv').config();//to use .env file
 require('./utils/updateElectionStatus');
+app.use(cors());//to allow cross origin resource sharing
 //to schedule the election
 
 //import routes
