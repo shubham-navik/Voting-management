@@ -4,7 +4,9 @@ import Footer from './components/Footer';
 import LeftContent from './components/LeftContent';
 import VariableComponent from './components/mainComponents/variableComponent';
 import Navbar from './components/navbar';
-import RightContent from './components/RightContent';
+// import Ragister from './components/Ragister';
+// import RightContent from './components/RightContent';
+import { Toaster } from 'react-hot-toast';
 
 function App() {
   return (
@@ -18,10 +20,12 @@ function App() {
           <VariableComponent />
         </section>
 
-        <section className='w-1/4 flex justify-center'><RightContent/></section>
+        {/* <section className='w-1/4 flex justify-center'><RightContent/></section> */}
       </div>
 
       <Footer />
+      <Toaster/>
+      
     </section>
   );
 }

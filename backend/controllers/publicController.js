@@ -6,7 +6,47 @@ const Contestant = require('../models/contestant');
 //get all Elections
 exports.getElections = async (req, res) => {
     try {
-        const elections = await Election.find({});
+        const totalElection = await Election.find({});
+        const elections = [];
+
+        for (const election of totalElection) {
+            const electionId = election.electionId;
+            const title = election.title;
+            const startDate = election.startDate;
+            const endDate = election.endDate;
+            const status = election.status;
+            const contestants = election.contestants;
+            const description = election.description;
+            const electionData = [];
+            for (const contestant of contestants) {
+                const tempContestant = await Contestant.findById(contestant);
+                if (tempContestant) {
+                    const votes = tempContestant.votes;
+                    const candidateId = tempContestant.candidate
+                    const candidate = await Candidate.findById(candidateId);
+                    if (candidate) {
+                        electionData.push({
+                            // candidateId: candidate._id,
+                            candidateName: candidate.name,
+                            votes
+                        })
+                    }
+
+                }
+            }
+
+            elections.push({
+                electionId,
+                title,
+                startDate,
+                endDate,
+                status,
+                description,
+                electionData,
+
+            })
+
+        }
         res.status(200).json({
             status: 'successfull fetched All Elections',
             msg:"All elections",
@@ -25,18 +65,52 @@ exports.getElections = async (req, res) => {
 
 exports.pastElection = async (req, res) => {
     try {
+        const totalElection = await Election.find({});
+        const elections = [];
 
-        const allElections = await Election.find({});
+        for (const election of totalElection) {
+            const electionId = election.electionId;
+            const title = election.title;
+            const startDate = election.startDate;
+            const endDate = election.endDate;
+            const status = election.status;
+            const contestants = election.contestants;
+            const description = election.description;
+            const electionData = [];
+            for (const contestant of contestants) {
+                const tempContestant = await Contestant.findById(contestant);
+                if (tempContestant) {
+                    const votes = tempContestant.votes;
+                    const candidateId = tempContestant.candidate
+                    const candidate = await Candidate.findById(candidateId);
+                    if (candidate) {
+                        electionData.push({
+                            // candidateId: candidate._id,
+                            candidateName: candidate.name,
+                            votes
+                        })
+                    }
 
-        const pastElections = allElections.filter(obj => obj.status === 'completed');
-        console.log(pastElections);
+                }
+            }
+            if(status==='completed')
+            elections.push({
+                electionId,
+                title,
+                startDate,
+                endDate,
+                status,
+                description,
+                electionData,
+
+            })
+
+        }
         res.status(200).json({
-            msg: "passed Election are :"+pastElections.length,
-            pastElections
-        });
-
-
-        
+            status: 'successfull fetched All Elections',
+            msg:"All elections",
+            elections
+        })
     } catch (err) {
         console.log(err);
         res.status(400).json({
@@ -49,15 +123,54 @@ exports.pastElection = async (req, res) => {
 
 exports.ongoingElection = async (req, res) => {
     try {
-        const allElections = await Election.find({});
+        const totalElection = await Election.find({});
+        const elections = [];
 
-        const ongoingElections = allElections.filter(obj => obj.status === 'ongoing');
-        console.log(ongoingElections);
+        for (const election of totalElection) {
+            const electionId = election.electionId;
+            const title = election.title;
+            const startDate = election.startDate;
+            const endDate = election.endDate;
+            const status = election.status;
+            const contestants = election.contestants;
+            const description = election.description;
+            const electionData = [];
+            for (const contestant of contestants) {
+                const tempContestant = await Contestant.findById(contestant);
+                if (tempContestant) {
+                    const votes = tempContestant.votes;
+                    const candidateId = tempContestant.candidate
+                    const candidate = await Candidate.findById(candidateId);
+                    if (candidate) {
+                        electionData.push({
+                            // candidateId: candidate._id,
+                            candidateId,
+                            electionId,
+                            candidateName: candidate.name,
+                            votes
+                        })
+                    }
+
+                }
+            }
+            if (status === 'ongoing')
+                elections.push({
+                    electionId,
+                    title,
+                    startDate,
+                    endDate,
+                    status,
+                    description,
+                    electionData,
+
+                })
+
+        }
         res.status(200).json({
-            msg: "ongoing Election are :"+ongoingElections.length,
-            ongoingElections
-        });
-
+            status: 'successfull fetched All Elections',
+            msg:"All elections",
+            elections
+        })
     }
     catch (err) {
         console.log(err);
@@ -70,15 +183,52 @@ exports.ongoingElection = async (req, res) => {
 //to get upcomming election
 exports.upcomingElection = async (req, res) => {
     try {
-        const allElections = await Election.find({});
+        const totalElection = await Election.find({});
+        const elections = [];
 
-        const upcomingElections = allElections.filter(obj => obj.status === 'pending');
-        console.log(upcomingElections);
+        for (const election of totalElection) {
+            const electionId = election.electionId;
+            const title = election.title;
+            const startDate = election.startDate;
+            const endDate = election.endDate;
+            const status = election.status;
+            const contestants = election.contestants;
+            const description = election.description;
+            const electionData = [];
+            for (const contestant of contestants) {
+                const tempContestant = await Contestant.findById(contestant);
+                if (tempContestant) {
+                    const votes = tempContestant.votes;
+                    const candidateId = tempContestant.candidate
+                    const candidate = await Candidate.findById(candidateId);
+                    if (candidate) {
+                        electionData.push({
+                            // candidateId: candidate._id,
+                            candidateName: candidate.name,
+                            party: candidate.party,
+                        })
+                    }
+
+                }
+            }
+            if (status === 'upcoming')
+                elections.push({
+                    electionId,
+                    title,
+                    startDate,
+                    endDate,
+                    status,
+                    description,
+                    electionData,
+
+                })
+
+        }
         res.status(200).json({
-            msg: "upcoming Election are :"+upcomingElections.length,
-            upcomingElections
-        });
-
+            status: 'successfull fetched All Elections',
+            msg:"All elections",
+            elections
+        })
     }
     catch (err) {
         console.log(err);
@@ -91,47 +241,37 @@ exports.upcomingElection = async (req, res) => {
 // to get candidate
 exports.getAllCandidate = async (req, res) => {
     try {
-        const tempCandidates = await Candidate.find({});
-        const allCandidates = [
-
-        ];
-        for (const candidate of tempCandidates) {
-            const party = await Party.findById(candidate.party);
-            if (!party) {
-                return res.status(404).json({
-                    msg:"party not found"
-                })
-            }
-            const partyName = party.name;
-            const candidateName = candidate.name;
-            const email = candidate.email;
-            const participatedElections = candidate.participatedElections.length;
-            const tempCandidate = {
-                _id: candidate._id,
-                name: candidateName,
-                email,
-                party: {
-                    name: partyName,
-                    id: candidate.party
-                },
-                participatedElections
-            }
-            allCandidates.push(tempCandidate);
-        }
-
-        res.status(200).json({
-            msg: " All Candidate ",
-            allCandidates
-        })
-
+      const candidates = await Candidate.find({}).populate('party');
+  
+      const allCandidates = candidates.map(candidate => {
+        const party = candidate.party;
+        const partyName = party ? party.name : "Unknown";
+        const partyId = party ? party._id : null;
+  
+        return {
+          _id: candidate._id,
+          name: candidate.name,
+          email: candidate.email,
+          party: {
+            name: partyName,
+            id: partyId,
+          },
+          participatedElections: candidate.participatedElections.length
+        };
+      });
+  
+      res.status(200).json({
+        msg: "All Candidates",
+        allCandidates
+      });
     } catch (err) {
-        console.log(err);
-        res.status(500).json({
-            msg:"Err geting Candidates"
-        })
+      console.log(err);
+      res.status(500).json({
+        msg: "Error getting Candidates"
+      });
     }
-}
-
+  };
+  
 // get All Parties
 exports.getAllParty = async (req, res) => {
     try {

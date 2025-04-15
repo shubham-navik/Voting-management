@@ -1,22 +1,33 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useState } from 'react';
 
 const Profile = () => {
-    const [voter, setVoter] = useState({});
-    
-    useEffect(() => {
-        axios.get('http://localhost:4000/api/voter/profile')
-            .then((res) => {
-            setVoter(res.data.voter)
-        })
-    },[])
-  return (
-      <div>
-          <h1> Voter Name : {voter.name}</h1>
-          <p> Voter Email : {voter.email}</p>
-    </div>
-  )
-}
+  const [voter, setVoter] = useState({});
+//   const [loading, setLoading] = useState(true);
+//   const [error, setError] = useState("");
+  
+  useEffect(() => {
+    axios.get('http://localhost:4000/api/voter/profile', {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    })
+    .then((res) => {
+      setVoter(res.data.voter);
+    //   setLoading(false);
+    })
+    .catch((err) => {
+    //   setError("Failed to load profile.");
+    //   setLoading(false);
+    });
+  }, []);
 
-export default Profile
+  return (
+    <div>
+      <h1>Voter Name: {voter.name}</h1>
+      <p>Voter Email: {voter.email}</p>
+    </div>
+  );
+};
+
+export default Profile;

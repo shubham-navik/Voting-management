@@ -28,11 +28,14 @@ const LeftContent = () => {
   const menuItems = [
     { text: 'Dashboard', icon: <BallotIcon />, path: '/dashboard' },
     { text: 'Cast Vote', icon: <HowToVoteIcon />, path: '/cast-vote' },
+    { text: 'Upcoming Elections', icon: <PollIcon />, path: '/upcoming-elections' },
+    { text: 'Ongoing Elections', icon: <PollIcon />, path: '/ongoing-elections' },
     { text: 'Candidates', icon: <PeopleIcon />, path: '/candidates' },
     { text: 'Results', icon: <PollIcon />, path: '/results' },
     { text: 'Profile', icon: <AccountCircleIcon />, path: '/profile' },
     { text: 'Logout', icon: <LogoutIcon />, path: '/logout' },
   ];
+  
 
   return (
       <Box sx={{

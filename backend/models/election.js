@@ -36,8 +36,8 @@ const electionSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ["pending", "ongoing", "completed"],  // Restricts possible values
-        default: "pending"
+        enum: ["upcoming", "ongoing", "completed"],  // Restricts possible values
+        default: "upcoming"
     }
 }, { timestamps: true });
 

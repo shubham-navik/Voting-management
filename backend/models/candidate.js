@@ -19,15 +19,13 @@ const candidateSchema = new mongoose.Schema({
         ref: 'Party',
         // required: true
     },
-    participatedElections: [{
-         
+    participatedElections: [{    
             type: mongoose.Schema.Types.ObjectId,
-            ref:'Election',
-        
-
+            ref: 'Election',
+            // default:[]
     }]
 
 
-});
+}, { timestamps: true });
 
 module.exports = mongoose.model('Candidate', candidateSchema);

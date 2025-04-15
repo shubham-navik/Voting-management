@@ -33,26 +33,42 @@ exports.createElection = async (req, res) => {
 //updtae election
 exports.updateElection = async (req, res) => {
     const { electionId, title, description, start, end } = req.body;
-
+  
     try {
-        let election = await Election.findOne({ electionId: electionId });
-        if (!election) {
-            return res.status(404).json({ msg: "Election not found with this Id: " + electionId });
-        }
-
-        election.title = title;
-        election.description = description;
-        election.startDate = start;
-        election.endDate = end;
-
-        await election.save();
-        res.json({ msg: "Election updated successfully", election });
+      // Find election by electionId
+      const election = await Election.findOne({ electionId });
+  
+      if (!election) {
+        return res.status(404).json({ msg: `Election not found with Id: ${electionId}` });
+      }
+  
+      // Optional: Check that start and end are valid dates
+      const startDate = new Date(start);
+      const endDate = new Date(end);
+  
+      if (isNaN(startDate) || isNaN(endDate)) {
+        return res.status(400).json({ msg: "Invalid date format for start or end" });
+      }
+  
+      if (startDate >= endDate) {
+        return res.status(400).json({ msg: "Start date must be before end date" });
+      }
+  
+      // Update fields
+      election.title = title || election.title;
+      election.description = description || election.description;
+      election.startDate = startDate;
+      election.endDate = endDate;
+  
+      await election.save();
+  
+      res.json({ msg: "Election updated successfully", election });
     } catch (err) {
-        console.log(err.message);
-        res.status(500).send('Error in updating election');
+      console.error("Error updating election:", err.message);
+      res.status(500).json({ msg: "Server error while updating election" });
     }
-}
-
+  };
+  
 
 // delete election
 
