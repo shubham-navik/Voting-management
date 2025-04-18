@@ -24,7 +24,33 @@ function App() {
       </div>
 
       <Footer />
-      <Toaster/>
+      
+<Toaster
+  position="top-right"
+  toastOptions={{
+    duration: 5000, // 5 seconds
+    style: {
+      background: '#333',
+      color: '#fff',
+      borderRadius: '8px',
+      padding: '12px 16px',
+      fontSize: '15px',
+      boxShadow: '0 4px 12px rgba(0,0,0,0.2)',
+    },
+    success: {
+      iconTheme: {
+        primary: '#4caf50',
+        secondary: '#fff',
+      },
+    },
+    error: {
+      iconTheme: {
+        primary: '#f44336',
+        secondary: '#fff',
+      },
+    },
+  }}
+/>
       
     </section>
   );

@@ -70,7 +70,7 @@ const OngoingElection = () => {
                   <Button
                     variant="contained"
                     color="primary"
-                    href={`/election/${election.electionId}`}
+                    href={`/election-details/${election.electionId}`}
                   >
                     View Details
                   </Button>

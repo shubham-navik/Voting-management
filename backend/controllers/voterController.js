@@ -152,3 +152,35 @@ exports.vote = async (req, res) => {
         res.status(500).send("Error in voting");
     }
 };
+
+
+// all voted elections bu
+
+exports.votedElections = async (req, res) => {
+    try {
+        const voterId = req.voter.id;
+        const elections = await Election.find();
+        const participatedElections = [];
+        for (const election of elections) {
+            const isVoter = election.voters.includes(voterId);
+            if (isVoter) {
+                const electionId = election.electionId;
+                const title = election.title;
+                participatedElections.push({
+                    electionId,
+                    title,
+                })
+            }
+        }
+
+
+        return res.status(200).json({
+            msg: "voter participated elections",
+            participatedElections
+        })
+    } catch (err) {
+        return res.status(500).json({
+            msg:"Error in getting participated elections"
+        })
+    }
+}

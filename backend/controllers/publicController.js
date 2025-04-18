@@ -347,3 +347,130 @@ exports.getElectionResultById = async (req, res) => {
         console.log(err)
     }
 }
+exports.getCandidateProfile = async (req, res) => {
+    try {
+        const candidateId = req.params.id;
+        const candidate = await Candidate.findById(candidateId).populate('party');
+
+        if (!candidate) {
+            return res.status(404).json({ msg: "Candidate Not Found" });
+        }
+
+        const candidateName = candidate.name;
+        const candidateEmail = candidate.email;
+        const candidateParty = candidate.party ? candidate.party.name : "Independent";
+
+        const participatedElections = [];
+
+        for (const electionId of candidate.participatedElections) {
+            const election = await Election.findById(electionId);
+            if (!election) continue;
+
+            const contestants = election.contestants;
+            const results = [];
+
+            for (const contestantId of contestants) {
+                const tempContestant = await Contestant.findById(contestantId);
+                if (tempContestant) {
+                    results.push({
+                        candidateId: tempContestant.candidate.toString(),
+                        votes: tempContestant.votes
+                    });
+                }
+            }
+
+            results.sort((a, b) => b.votes - a.votes); // Descending
+
+            let rank = results.length;
+            for (let i = 0; i < results.length; i++) {
+                if (results[i].candidateId === candidateId) {
+                    rank = i + 1;
+                    break;
+                }
+            }
+
+            const participatedYear = new Date(election.startDate).getFullYear();
+
+            participatedElections.push({
+                electionId:election.electionId,
+                electionTitle: election.title,
+                electionId: election._id,
+                participatedYear,
+                status: election.status,
+                totalContestants: results.length,
+                rank
+            });
+        }
+
+        return res.status(200).json({
+            msg: "Candidate Profile",
+            profile: {
+                name: candidateName,
+                email: candidateEmail,
+                party: candidateParty,
+                totalParticipatedElections: participatedElections.length,
+                participatedElections
+            }
+        });
+
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ msg: "Error in fetching candidate profile" });
+    }
+};
+
+
+exports.getElectionDetails = async (req, res) => {
+    try {
+        const electionId = req.params.id;
+        const election = await Election.findById(electionId).populate("contestants");
+
+        if (!election) {
+            return res.status(404).json({ msg: "Election Not Found" });
+        }
+
+        const contestantsData = [];
+
+        // Fetch all contestants and their associated candidate info
+        for (const contestantId of election.contestants) {
+            const contestant = await Contestant.findById(contestantId).populate("candidate");
+            if (contestant && contestant.candidate) {
+                contestantsData.push({
+                    contestantId: contestant._id,
+                    candidateId: contestant.candidate._id,
+                    candidateName: contestant.candidate.name,
+                    email: contestant.candidate.email,
+                    party: contestant.candidate.party || "Independent",
+                    votes: contestant.votes
+                });
+            }
+        }
+
+        // Sort by votes to determine rank
+        contestantsData.sort((a, b) => b.votes - a.votes);
+
+        // Assign ranks
+        contestantsData.forEach((contestant, index) => {
+            contestant.rank = index + 1;
+        });
+
+        const participatedYear = new Date(election.startDate).getFullYear();
+
+        return res.status(200).json({
+            msg: "Election Details",
+            election: {
+                electionId: election._id,
+                title: election.title,
+                startDate: election.startDate,
+                endDate: election.endDate,
+                status: election.status,
+                participatedYear,
+                totalContestants: contestantsData.length,
+                contestants: contestantsData
+            }
+        });
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ msg: "Error in fetching election details" });
+    }
+};

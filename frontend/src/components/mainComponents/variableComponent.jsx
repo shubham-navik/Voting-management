@@ -13,7 +13,8 @@ import Login from '../Login';
 import UpcomingElection from '../UpcomingElection';
 import OngoingElection from '../OngoingElection';
 import CastVote from '../CastVote';
-
+import Dashboard from '../Dashboard';
+import ElectionDetails from '../ElectionDetails';
 const VariableComponent = () => {
   // const token = localStorage.getItem('token');
 
@@ -24,7 +25,9 @@ const VariableComponent = () => {
           <Route path='/' element={<MiddleContent />} />
           <Route path='/candidates' element={<Candidates />} />
           <Route path='/results' element={<Elections />} />
-          <Route path='/candidate' element={<Candidate />} />
+          <Route path='/candidate-profile/:id' element={<Candidate />} />
+          <Route path="/election-details/:id" element={<ElectionDetails />} />
+          <Route path='/dashboard' element={<Dashboard />} />
           <Route path='/results' element={<Results />} />
           <Route path='/about' element={<About />} />
           <Route path='/profile' element={<Profile />} />

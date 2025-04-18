@@ -5,7 +5,7 @@ cron.schedule('*/1 * * * *', async () => {
   try {
     const elections = await Election.find({});
     const now = new Date();
-    console.log("Current Time:", now.toISOString());
+    // console.log("Current Time:", now.toISOString());
 
     for (const election of elections) {
       const start = new Date(election.startDate);
@@ -30,9 +30,9 @@ cron.schedule('*/1 * * * *', async () => {
       if (election.status !== newStatus) {
         election.status = newStatus;
         await election.save();
-        console.log(`Updated status to: ${newStatus}`);
+        // console.log(`Updated status to: ${newStatus}`);
       } else {
-        console.log(`No update needed. Still: ${newStatus}`);
+        // console.log(`No update needed. Still: ${newStatus}`);
       }
     }
   } catch (err) {
