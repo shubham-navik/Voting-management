@@ -19,7 +19,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     axios
-      .get('http://localhost:4000/api/voter/votedElections', {
+      .get('https://voting-management.onrender.com/api/voter/votedElections', {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`
         }

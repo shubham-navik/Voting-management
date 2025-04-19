@@ -8,7 +8,7 @@ const Elections = () => {
 
   useEffect(() => {
     axios
-      .get('http://localhost:4000/api/public/pastElections')
+      .get('https://voting-management.onrender.com/api/public/pastElections')
       .then((res) => {
         setElections(res.data);
       })

@@ -21,7 +21,7 @@ const CastVote = () => {
 
   const fetchElections = () => {
     axios
-      .get('http://localhost:4000/api/public/ongoingElections')
+      .get('https://voting-management.onrender.com/api/public/ongoingElections')
       .then((res) => {
         setElections(res.data.elections);
         toast.success('Fetched ongoing elections');
@@ -38,7 +38,7 @@ const CastVote = () => {
   const handleVote = (electionId, candidateId) => {
     axios
       .post(
-        'http://localhost:4000/api/voter/vote',
+        'https://voting-management.onrender.com/api/voter/vote',
         { electionId, candidateId },
         {
           headers: {

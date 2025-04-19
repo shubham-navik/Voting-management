@@ -23,7 +23,7 @@ const ElectionDetails = () => {
   useEffect(() => {
     const fetchElection = async () => {
       try {
-        const res = await axios.get(`http://localhost:4000/api/public/getElectionDetails/${id}`);
+        const res = await axios.get(`https://voting-management.onrender.com/api/public/getElectionDetails/${id}`);
         setElection(res.data.election);
       } catch (err) {
         console.error("Failed to fetch election details:", err.message);

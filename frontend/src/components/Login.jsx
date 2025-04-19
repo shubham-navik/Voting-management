@@ -49,7 +49,7 @@ const Login = () => {
     if (validate()) {
       setLoading(true);
       axios
-        .post("http://localhost:4000/api/voter/login", formData)
+        .post("https://voting-management.onrender.com/api/voter/login", formData)
         .then((res) => {
           toast.success("Login successful");
           localStorage.setItem("token", res.data.token);

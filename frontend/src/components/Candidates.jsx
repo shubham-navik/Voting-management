@@ -22,7 +22,7 @@ const Candidate = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:4000/api/public/getAllCandidates")
+      .get("https://voting-management.onrender.com/api/public/getAllCandidates")
       .then((res) => {
         setCandidates(res.data.allCandidates);
       })

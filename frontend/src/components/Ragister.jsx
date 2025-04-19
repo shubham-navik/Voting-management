@@ -45,7 +45,7 @@ const Register = () => {
       setIsSubmitting(true);
 
       axios
-        .post("http://localhost:4000/api/voter/register", formData)
+        .post("https://voting-management.onrender.com/api/voter/register", formData)
         .then((res) => {
           toast.success(`Welcome, ${formData.name}! 🎉`);
           navigate("/login");

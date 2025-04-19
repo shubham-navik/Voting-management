@@ -19,7 +19,7 @@ const OngoingElection = () => {
 
   const fetchElections = async () => {
     try {
-      const res = await axios.get('http://localhost:4000/api/public/ongoingElections');
+      const res = await axios.get('https://voting-management.onrender.com/api/public/ongoingElections');
       setElections(res.data.elections || []);
       toast.success('Ongoing elections loaded');
     } catch (err) {

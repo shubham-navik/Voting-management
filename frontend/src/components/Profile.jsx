@@ -7,7 +7,7 @@ const Profile = () => {
 //   const [error, setError] = useState("");
   
   useEffect(() => {
-    axios.get('http://localhost:4000/api/voter/profile', {
+    axios.get('https://voting-management.onrender.com/api/voter/profile', {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`
       }

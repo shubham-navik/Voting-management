@@ -5,7 +5,7 @@ const UpcomingElection = () => {
   const [upcomingElections, setUpcomingElections] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:4000/api/public/upcomingElections')
+    axios.get('https://voting-management.onrender.com/api/public/upcomingElections')
       .then((res) => {
         setUpcomingElections(res.data.elections);
       })
